@@ -10,7 +10,25 @@
     <h1>Guestbook</h1>
 
 <?php
-if(isset($_POST['name']) && isset($_POST['email'] && isset($_POST['title'])
+if(isset($_POST['name']) && isset($_POST['email']) && isset($_POST['title']) && isset($_POST['comment'])){
+
+    try {
+        $db = new PDO('mysql:host=localhost;dbname=oop_php_course', 'root', '');
+        $sql = 'INSERT INTO guestbook (title, comment, author, email) VALUES (?,?,?,?)';
+        $values = array(
+            $_POST['title'],
+            $_POST['comment'],
+            $_POST['name'],
+            $_POST['email'],
+        );
+        $com = $db->prepare($sql);
+        $com->execute($values);
+        echo 'comment added';
+    } catch(PDOException $e){
+        echo 'error: ' . htmlspecialchars($e->getMessage());
+    }
+
+} else echo 'error error error';
 
 ?>
 
@@ -21,8 +39,8 @@ if(isset($_POST['name']) && isset($_POST['email'] && isset($_POST['title'])
     <input type="text" name="email"><br>
     <label for="title">Title</label>
     <input type="text" name="title"><br>
-    <label for="com">Comment</label>
-    <textarea name="com" cols="30" rows="10"></textarea><br>
+    <label for="comment">Comment</label>
+    <textarea name="comment" cols="30" rows="10"></textarea><br>
     <input type="submit" name="submit" value="Submit">    
 </form>
     
